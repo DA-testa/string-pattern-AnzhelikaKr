@@ -1,29 +1,67 @@
 # python3
-
+M = 13
+Q = 256
 def read_input():
-    # this function needs to aquire input both from keyboard and file
-    # as before, use capital i (input from keyboard) and capital f (input from file) to choose which input type will follow
     
+    inp = input()
+    if 'I' in inp:
+        P=input()
+        T=input()
+        
+    elif 'F' in inp: 
+        with open("./tests/06", mode='r',encoding="utf8") as fail:
+            P=fail.readline()
+            T=fail.readline()
+    else: 
+        print("Wrong format")
+        return
     
-    # after input type choice
-    # read two lines 
-    # first line is pattern 
-    # second line is text in which to look for pattern 
-    
-    # return both lines in one return
-    
-    # this is the sample return, notice the rstrip function
-    return (input().rstrip(), input().rstrip())
+    return (P.rstrip(), T.rstrip())
 
 def print_occurrences(output):
     # this function should control output, it doesn't need any return
     print(' '.join(map(str, output)))
 
-def get_occurrences(pattern, text):
-    # this function should find the occurances using Rabin Karp alghoritm 
+def hashing(string):
+    global M, Q
 
+    res=0
+    for ch in str(string):
+        res = (M*res + ord(ch)) % Q
+
+    return res
+
+def get_occurrences(pattern, text):
+    # this function should find the occurances using Rabin Karp alghoritm
+    global M, Q 
+    res=[]
+    m = len(pattern)
+    n = len(text)
+
+    multiplier=1
+    for i in range(m-1):
+        multiplier = (multiplier*M) % Q
+    
+    t=text[:m]
+    pHash = hashing(pattern)
+    tHash = hashing(t)
+    
+    for i in range(n-m):
+
+        if pHash == tHash:
+            if t==pattern:
+                res.append(str(i))
+        t=t[1:]+text[i+m]
+        tHash = (M*(tHash-ord(text[i])*multiplier) + ord(text[i+m])) % Q
+        if tHash<0:
+            t+=Q
+
+    if pHash == tHash:
+        if t==pattern:
+            res.append(str(n-m))
+        
     # and return an iterable variable
-    return [0]
+    return res
 
 
 # this part launches the functions
