@@ -9,11 +9,9 @@ def read_input():
         T=input()
         
     elif 'F' in inp: 
-        name=input()
-        if 'a' not in name:
-            with open("./tests/"+name, mode='r',encoding="utf8") as fail:
-                P=fail.readline()
-                T=fail.readline()
+        with open("./tests/06", mode='r',encoding="utf8") as fail:
+            P=fail.readline()
+            T=fail.readline()
     else: 
         print("Wrong format")
         return
